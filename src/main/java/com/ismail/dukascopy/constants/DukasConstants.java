@@ -1,4 +1,4 @@
-package com.ismail.dukascopy;
+package com.ismail.dukascopy.constants;
 
 /**
  * Constants used by Dukas

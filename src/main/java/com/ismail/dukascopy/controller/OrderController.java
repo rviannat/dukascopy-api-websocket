@@ -11,17 +11,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dukascopy.api.IEntryOrder;
 import com.dukascopy.api.IOrder;
 import com.dukascopy.api.Instrument;
 import com.dukascopy.api.JFException;
-import com.ismail.dukascopy.DukasConstants;
+import com.ismail.dukascopy.constants.DukasConstants;
 import com.ismail.dukascopy.model.ApiException;
 import com.ismail.dukascopy.model.ClosePositionResp;
 import com.ismail.dukascopy.model.OrderSide;
 import com.ismail.dukascopy.model.OrderType;
 import com.ismail.dukascopy.model.Position;
-import com.ismail.dukascopy.service.DukasStrategy;
+import com.ismail.dukascopy.strategy.DukasStrategy;
 
 import lombok.extern.slf4j.Slf4j;
 

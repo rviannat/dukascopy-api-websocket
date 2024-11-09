@@ -12,7 +12,7 @@ import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 
 import com.dukascopy.api.Instrument;
 import com.ismail.dukascopy.service.DukasService;
-import com.ismail.dukascopy.service.DukasStrategy;
+import com.ismail.dukascopy.strategy.DukasStrategy;
 import com.ismail.dukascopy.service.DukasSubscriber;
 import com.ismail.dukascopy.util.DukasUtil;
 import com.ismail.dukascopy.util.ObjectQueue;

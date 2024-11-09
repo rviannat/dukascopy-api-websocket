@@ -4,14 +4,13 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.lang.Thread.UncaughtExceptionHandler;
-import java.net.UnknownHostException;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 
+import com.ismail.dukascopy.strategy.DukasStrategy;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;

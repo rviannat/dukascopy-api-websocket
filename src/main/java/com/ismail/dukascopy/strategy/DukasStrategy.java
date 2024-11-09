@@ -1,4 +1,4 @@
-package com.ismail.dukascopy.service;
+package com.ismail.dukascopy.strategy;
 
 import com.dukascopy.api.Filter;
 import com.dukascopy.api.IAccount;
@@ -17,7 +17,7 @@ import com.dukascopy.api.OfferSide;
 import com.dukascopy.api.Period;
 import com.dukascopy.api.instrument.IFinancialInstrument.Type;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ismail.dukascopy.DukasConstants;
+import com.ismail.dukascopy.constants.DukasConstants;
 import com.ismail.dukascopy.config.DukasConfig;
 import com.ismail.dukascopy.model.DukasSubscription;
 import com.ismail.dukascopy.model.OrderBook;
@@ -25,6 +25,7 @@ import com.ismail.dukascopy.model.OrderBookEntry;
 import com.ismail.dukascopy.model.OrderSide;
 import com.ismail.dukascopy.model.OrderType;
 import com.ismail.dukascopy.model.TopOfBook;
+import com.ismail.dukascopy.service.DukasSubscriber;
 import com.ismail.dukascopy.util.DukasUtil;
 import java.time.Clock;
 import java.time.Instant;
@@ -34,7 +35,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.Callable;
@@ -45,7 +45,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Dukascopy Strategy implementation that sends data to websocket clients

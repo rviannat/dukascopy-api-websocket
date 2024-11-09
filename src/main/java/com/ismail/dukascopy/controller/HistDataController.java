@@ -7,13 +7,11 @@ import com.dukascopy.api.Period;
 import com.dukascopy.api.instrument.IFinancialInstrument.Type;
 import com.ismail.dukascopy.model.ApiException;
 import com.ismail.dukascopy.model.Candle;
-import com.ismail.dukascopy.service.DukasStrategy;
+import com.ismail.dukascopy.strategy.DukasStrategy;
 import com.ismail.dukascopy.util.DukasUtil;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
-import java.util.OptionalLong;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
