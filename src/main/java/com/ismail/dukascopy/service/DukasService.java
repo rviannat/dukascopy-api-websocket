@@ -176,6 +176,8 @@ public class DukasService implements ISystemListener, InitializingBean, Disposab
 
         log.info("IClient disconnected.");
 
+        client.startStrategy(strategy);
+
         client.getStartedStrategies().forEach((id, strategy) -> {
 
             client.stopStrategy(id);

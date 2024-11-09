@@ -189,6 +189,7 @@ public class DukasStrategy implements IStrategy {
 
 	@Override
 	public void onTick(Instrument instrument, ITick tick) {
+		System.out.println("On Tick: ");
 		// log.info("onTick << " + instrument.getName() + ": " + tick.toString());
 
 		// --------------------------------------------------------------------------------------
@@ -673,7 +674,7 @@ public class DukasStrategy implements IStrategy {
 					double slPrice = stopLossPrice > 0L ? stopLossPrice
 							: entryPrice + (stopLossPips * instrument.getPipValue());
 
-					if (trailingSl) {
+					if (true) {
 						if (takeProfitPips > 0L) {
 							order.setTakeProfitPrice(tpPrice);
 						}
