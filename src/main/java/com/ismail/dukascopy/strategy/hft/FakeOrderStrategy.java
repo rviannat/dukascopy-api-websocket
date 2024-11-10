@@ -67,7 +67,7 @@ public class FakeOrderStrategy implements IStrategy {
 
                 IOrder order = engine.submitOrder(getLabel(inst), inst, BUY, tick.getBidVolume(), tick.getBid(),
                            SLIPPAGE, getRoundedPrice(stopLoss), getRoundedPrice(tick.getAsk()), TIME_OUT);
-                order.
+                order.close();
 
                 stopLoss = tick.getAsk() + getPipPrice();
 
