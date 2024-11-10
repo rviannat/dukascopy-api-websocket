@@ -44,7 +44,7 @@ public class DukasService implements ISystemListener, InitializingBean, Disposab
     public final DukasConfig config;
     public final IClient client;
     public FastStrategy fastStrategy = new FastStrategy();
-    public FastStrategy strategy2 = new FastStrategy();
+    public Algo2Strategy strategy2 = new Algo2Strategy();
     public Algo2Strategy strategy3 = new Algo2Strategy();
     public AlgosmartFirstStrategy4 strategy4 = new AlgosmartFirstStrategy4();
     public AlgosmartFirstStrategy strategy0 = new AlgosmartFirstStrategy();
