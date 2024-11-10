@@ -74,10 +74,9 @@ public class Algo2Strategy implements IStrategy {
         try {
             if (getPositions().size() < 20) {
 
-                if (tick.getBid() > tick.getAsk()) {
-                    submitOrder(OrderCommand.BUY, tick, instrument);
-                    submitOrder(OrderCommand.SELL, tick, instrument);
-                }
+                submitOrder(OrderCommand.BUY, tick, instrument);
+                submitOrder(OrderCommand.SELL, tick, instrument);
+
             }
         } catch (Exception e) {
             throw new JFException(e);

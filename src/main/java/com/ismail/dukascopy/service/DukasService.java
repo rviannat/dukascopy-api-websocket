@@ -14,6 +14,7 @@ import java.util.concurrent.ThreadFactory;
 
 import com.dukascopy.api.Instrument;
 import com.ismail.dukascopy.strategy.*;
+import com.ismail.dukascopy.strategy.hft.FastStrategy;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -165,22 +166,22 @@ public class DukasService implements ISystemListener, InitializingBean, Disposab
             return;
         }
 
-        long id = client.startStrategy(strategy0);
-        log.info("Started strategy : [{}] {}", 1, strategy0);
-        id = client.startStrategy(strategy1);
-        log.info("Started strategy : [{}] {}", 2, strategy1);
-        id = client.startStrategy(strategy2);
-        log.info("Started strategy : [{}] {}", 3, strategy2);
-        id = client.startStrategy(strategy3);
-        log.info("Started strategy : [{}] {}", 4, strategy3);
-        id = client.startStrategy(strategy4);
-        log.info("Started strategy : [{}] {}", 5, strategy4);
-        id = client.startStrategy(strategy4);
-        log.info("Started strategy : [{}] {}", 6, strategy5);
-        id = client.startStrategy(strategy6);
-        log.info("Started strategy : [{}] {}", 7, strategy6);
-        id = client.startStrategy(strategy4);
-        log.info("Started strategy : [{}] {}", 8, strategy4);
+        //long id = client.startStrategy(strategy0);
+        //log.info("Started strategy : [{}] {}", 1, strategy0);
+        //id = client.startStrategy(strategy1);
+        //log.info("Started strategy : [{}] {}", 2, strategy1);
+        //id = client.startStrategy(strategy2);
+        //log.info("Started strategy : [{}] {}", 3, strategy2);
+        //id = client.startStrategy(strategy3);
+        //log.info("Started strategy : [{}] {}", 4, strategy3);
+        //id = client.startStrategy(strategy4);
+        //log.info("Started strategy : [{}] {}", 5, strategy4);
+        //id = client.startStrategy(strategy4);
+        //log.info("Started strategy : [{}] {}", 6, strategy5);
+        //id = client.startStrategy(strategy6);
+        //log.info("Started strategy : [{}] {}", 7, strategy6);
+        //id = client.startStrategy(strategy4);
+        //log.info("Started strategy : [{}] {}", 8, strategy4);
 
     }
 
