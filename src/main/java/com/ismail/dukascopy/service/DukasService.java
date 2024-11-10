@@ -202,7 +202,7 @@ public class DukasService implements ISystemListener, InitializingBean, Disposab
         //client.startStrategy(strategy0);
         //client.startStrategy(strategy1);
         //client.startStrategy(strategy2);
-        client.startStrategy(strategy3);
+        client.startStrategy(strategy2);
         //client.startStrategy(strategy4);
         //client.startStrategy(strategy5);
         client.startStrategy(fastStrategy);
