@@ -3,7 +3,6 @@ package com.ismail.dukascopy.strategy;
 import com.dukascopy.api.*;
 import com.dukascopy.api.IEngine.OrderCommand;
 import com.dukascopy.api.indicators.IIndicator;
-import com.ismail.dukascopy.model.Position;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -13,11 +12,8 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.TimeZone;
 
-import static com.ismail.dukascopy.constants.Constants.AVALANCHE_AMOUNT;
-import static com.ismail.dukascopy.constants.Constants.ORDER_AMOUNT;
-
 @Service
-public class AlgoBuyAvalanche implements IStrategy {
+public class Volume implements IStrategy {
 
     private IEngine engine;
     private IConsole console;
@@ -73,25 +69,7 @@ public class AlgoBuyAvalanche implements IStrategy {
 
 
     public void onTick(Instrument inst, ITick tick) throws JFException {
-
-        try {
-            if (getPositions().size() < 2 && inst.isTradable()) {
-
-                if(tick.getBidVolume() > 1) {
-
-                    for(double avalancheVolume = .01; avalancheVolume < tick.getBidVolume(); avalancheVolume += .01) {
-
-                        stopLossPrice = tick.getBid() - getPipPrice(LOSS_PIP);
-
-                        engine.submitOrder(getLabel(inst), inst, OrderCommand.BUY, avalancheVolume, tick.getBid(), slippage, stopLossPrice,takeProfitPrice,2000);
-
-
-                    }
-                }
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        System.out.println("[BID: " + tick.getBidVolume() + " - ASK: " + tick.getBidVolume());
     }
 
     private void closeOrder(IOrder order) throws JFException {

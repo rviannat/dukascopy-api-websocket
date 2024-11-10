@@ -5,11 +5,14 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 import java.io.ByteArrayInputStream;
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 
+import com.dukascopy.api.Instrument;
 import com.ismail.dukascopy.strategy.*;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -45,6 +48,7 @@ public class DukasService implements ISystemListener, InitializingBean, Disposab
     public AlgosmartFirstStrategy strategy0 = new AlgosmartFirstStrategy();
     public AlgoBuy strategy5 = new AlgoBuy();
     public AlgoSell strategy6 = new AlgoSell();
+    public Volume volume = new Volume();
     public final ThreadFactory delegate;
     public final ScheduledExecutorService executor;
     public JettyServer server = null;
@@ -186,13 +190,22 @@ public class DukasService implements ISystemListener, InitializingBean, Disposab
 
         log.info("IClient disconnected.");
 
-        client.startStrategy(strategy0);
-        client.startStrategy(strategy1);
-        client.startStrategy(strategy2);
-        client.startStrategy(strategy3);
-        client.startStrategy(strategy4);
-        client.startStrategy(strategy5);
-        client.startStrategy(strategy6);
+        Set<Instrument> instruments = new HashSet<Instrument>();
+        instruments.add(Instrument.EURUSD);
+        client.setSubscribedInstruments(instruments);
+
+        //client.startStrategy(strategy0);
+        //client.startStrategy(strategy1);
+        //client.startStrategy(strategy2);
+        //client.startStrategy(strategy3);
+        //client.startStrategy(strategy4);
+        //client.startStrategy(strategy5);
+        //client.startStrategy(strategy6);
+        client.startStrategy(volume);
+
+
+
+
 
         client.getStartedStrategies().forEach((id, strategy) -> {
 
