@@ -162,21 +162,21 @@ public class DukasService implements ISystemListener, InitializingBean, Disposab
         }
 
         long id = client.startStrategy(strategy0);
-        log.info("Started strategy : [{}] {}", id, strategy0);
+        log.info("Started strategy : [{}] {}", 1, strategy0);
         id = client.startStrategy(strategy1);
-        log.info("Started strategy : [{}] {}", id, strategy1);
+        log.info("Started strategy : [{}] {}", 2, strategy1);
         id = client.startStrategy(strategy2);
-        log.info("Started strategy : [{}] {}", id, strategy2);
+        log.info("Started strategy : [{}] {}", 3, strategy2);
         id = client.startStrategy(strategy3);
-        log.info("Started strategy : [{}] {}", id, strategy3);
+        log.info("Started strategy : [{}] {}", 4, strategy3);
         id = client.startStrategy(strategy4);
-        log.info("Started strategy : [{}] {}", id, strategy4);
+        log.info("Started strategy : [{}] {}", 5, strategy4);
         id = client.startStrategy(strategy4);
-        log.info("Started strategy : [{}] {}", id, strategy5);
+        log.info("Started strategy : [{}] {}", 6, strategy5);
         id = client.startStrategy(strategy6);
-        log.info("Started strategy : [{}] {}", id, strategy6);
+        log.info("Started strategy : [{}] {}", 7, strategy6);
         id = client.startStrategy(strategy4);
-        log.info("Started strategy : [{}] {}", id, strategy4);
+        log.info("Started strategy : [{}] {}", 8, strategy4);
 
     }
 
