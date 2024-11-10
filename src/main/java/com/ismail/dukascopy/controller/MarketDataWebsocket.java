@@ -67,8 +67,8 @@ public class MarketDataWebsocket extends WebSocketAdapter implements DukasSubscr
         eventProcessor.start();
 
         // app = DukascopyApplication.getInstance();
-        dukasService = DukasService.getInstance();
-        strategy = dukasService.strategy;
+        //dukasService = DukasService.getInstance();
+        //strategy = dukasService.strategy;
 
         // --------------------------------------------------------------------------------------------------
         // Optional: subscribe to a list of instrumentIDs; otherwise return default list

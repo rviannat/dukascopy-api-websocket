@@ -3,17 +3,15 @@ package com.ismail.dukascopy.strategy;
 import com.dukascopy.api.*;
 import com.dukascopy.api.IEngine.OrderCommand;
 import com.dukascopy.api.indicators.IIndicator;
-import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.List;
 import java.util.TimeZone;
-@Service
-public class AlgosmartFirstStrategy2 implements IStrategy {
+
+public class FastStrategy implements IStrategy {
 
     private IEngine engine;
     private IConsole console;
@@ -29,7 +27,7 @@ public class AlgosmartFirstStrategy2 implements IStrategy {
     @Configurable("Period")
     public Period selectedPeriod = Period.ONE_SEC;
     @Configurable("Slippage")
-    public double slippage = 0;
+    public double SLIPPAGE = 0;
     @Configurable("Amount")
     public double amount = 0.01;
     @Configurable("Place long first")
@@ -71,27 +69,16 @@ public class AlgosmartFirstStrategy2 implements IStrategy {
         try {
             if (getPositions().size() < 50 && inst.isTradable()) {
 
-                ask = Arrays.stream(tick.getAsks()).min().orElse(0d);
-                bid = Arrays.stream(tick.getBids()).max().orElse(0d);
+                if(tick.getBid() < tick.getAsk()) {
+                    stopLossPrice = tick.getBid() - getPipPrice(LOSS_PIP);
 
-                if(bid < ask) {
+                    engine.submitOrder(getLabel(inst), inst, OrderCommand.BUY, tick.getBidVolume(), tick.getBid(), SLIPPAGE, stopLossPrice, tick.getAsk());
 
-                    if (pendingOrderBuy != null && pendingOrderBuy.getState() == IOrder.State.FILLED) {
-                        stopLossPrice = bid - getPipPrice(LOSS_PIP);
-                        takeProfitPrice = ask + getPipPrice(PROFIT_PIP);
+                    stopLossPrice = tick.getAsk() + getPipPrice(LOSS_PIP);
 
-                        pendingOrderBuy = engine.submitOrder(getLabel(inst), inst, OrderCommand.BUYLIMIT, amount, bid, slippage, stopLossPrice, takeProfitPrice);
-                    } else {
-                        closeOrder(pendingOrderBuy);
-                    }
-                    if (pendingOrderSell != null && pendingOrderSell.getState() == IOrder.State.FILLED) {
-                        stopLossPrice = ask + getPipPrice(LOSS_PIP);
-                        takeProfitPrice = bid - getPipPrice(PROFIT_PIP);
+                    engine.submitOrder(getLabel(inst), inst, OrderCommand.SELL, tick.getAskVolume(), tick.getAsk(), SLIPPAGE, stopLossPrice, tick.getBid());
 
-                        pendingOrderSell = engine.submitOrder(getLabel(inst), inst, OrderCommand.SELLLIMIT, amount, ask, slippage, stopLossPrice, takeProfitPrice);
-                    } else {
-                        closeOrder(pendingOrderSell);
-                    }
+
                 }
 
 

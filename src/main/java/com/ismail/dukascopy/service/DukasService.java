@@ -10,6 +10,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 
+import com.ismail.dukascopy.strategy.AlgosmartFirstStrategy2;
 import com.ismail.dukascopy.strategy.DukasStrategy;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -43,7 +44,7 @@ public class DukasService implements ISystemListener, InitializingBean, Disposab
 
     public final IClient client;
 
-    public final DukasStrategy strategy;
+    public AlgosmartFirstStrategy2 strategy = new AlgosmartFirstStrategy2();
 
     public final ThreadFactory delegate;
 
@@ -65,7 +66,7 @@ public class DukasService implements ISystemListener, InitializingBean, Disposab
 
         this.client = Objects.requireNonNull(client, "IClient is required.");
 
-        this.strategy = Objects.requireNonNull(strategy, "IStrategy is required.");
+
 
         this.delegate = Executors.defaultThreadFactory();
 
