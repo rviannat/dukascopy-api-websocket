@@ -166,8 +166,8 @@ public class DukasService implements ISystemListener, InitializingBean, Disposab
             return;
         }
 
-        //long id = client.startStrategy(strategy0);
-        //log.info("Started strategy : [{}] {}", 1, strategy0);
+        long id = client.startStrategy(volume);
+        log.info("Started strategy : [{}] {}", 1, strategy0);
         //id = client.startStrategy(strategy1);
         //log.info("Started strategy : [{}] {}", 2, strategy1);
         //id = client.startStrategy(strategy2);
