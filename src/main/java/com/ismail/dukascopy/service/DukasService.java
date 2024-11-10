@@ -14,6 +14,7 @@ import java.util.concurrent.ThreadFactory;
 
 import com.dukascopy.api.Instrument;
 import com.ismail.dukascopy.strategy.*;
+import com.ismail.dukascopy.strategy.hft.Algo2Strategy;
 import com.ismail.dukascopy.strategy.hft.FastStrategy;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -42,7 +43,7 @@ public class DukasService implements ISystemListener, InitializingBean, Disposab
     private static DukasService sMe = null;
     public final DukasConfig config;
     public final IClient client;
-    public AlgosmartFirstStrategy2 strategy1 = new AlgosmartFirstStrategy2();
+    public FastStrategy fastStrategy = new FastStrategy();
     public FastStrategy strategy2 = new FastStrategy();
     public Algo2Strategy strategy3 = new Algo2Strategy();
     public AlgosmartFirstStrategy4 strategy4 = new AlgosmartFirstStrategy4();
@@ -166,12 +167,12 @@ public class DukasService implements ISystemListener, InitializingBean, Disposab
             return;
         }
 
-        long id = client.startStrategy(volume);
-        log.info("Started strategy : [{}] {}", 1, strategy0);
-        //id = client.startStrategy(strategy1);
-        //log.info("Started strategy : [{}] {}", 2, strategy1);
-        //id = client.startStrategy(strategy2);
-        //log.info("Started strategy : [{}] {}", 3, strategy2);
+        client.startStrategy(volume);
+        log.info("Started strategy : [{}] {}", 1, "Designed to verify bid and ask volume");
+        client.startStrategy(fastStrategy);
+        log.info("Started strategy : [{}] {}", 2, "create bids and asks simultaneously with a small price looking for a fast oscillation");
+        client.startStrategy(strategy2);
+        log.info("Started strategy : [{}] {}", 3, "create multiples order but with a bigger range");
         //id = client.startStrategy(strategy3);
         //log.info("Started strategy : [{}] {}", 4, strategy3);
         //id = client.startStrategy(strategy4);
@@ -193,16 +194,19 @@ public class DukasService implements ISystemListener, InitializingBean, Disposab
 
         Set<Instrument> instruments = new HashSet<Instrument>();
         instruments.add(Instrument.EURUSD);
+        instruments.add(Instrument.GBPUSD);
+        instruments.add(Instrument.USDCHF);
+        instruments.add(Instrument.USDJPY);
         client.setSubscribedInstruments(instruments);
 
         //client.startStrategy(strategy0);
         //client.startStrategy(strategy1);
         //client.startStrategy(strategy2);
-        //client.startStrategy(strategy3);
+        client.startStrategy(strategy3);
         //client.startStrategy(strategy4);
         //client.startStrategy(strategy5);
-        //client.startStrategy(strategy6);
-        client.startStrategy(volume);
+        client.startStrategy(fastStrategy);
+        //client.startStrategy(volume);
 
 
 

@@ -23,7 +23,7 @@ public class FastStrategy implements IStrategy {
     private IOrder pendingOrderBuy;
     private IOrder pendingOrderSell;
     @Configurable("Instrument")
-    public Instrument instrument = Instrument.USDJPY;
+    public Instrument instrument = Instrument.EURUSD;
     @Configurable("Period")
     public Period selectedPeriod = Period.ONE_SEC;
     @Configurable("Slippage")
@@ -35,12 +35,12 @@ public class FastStrategy implements IStrategy {
     @Configurable("Take profit pips")
     public final int PROFIT_PIP = 0;
     @Configurable("Stop loss in pips")
-    public final double LOSS_PIP = 1.5;
-    private double stopLoss = .0;
+    public final double LOSS_PIP = 1;
+    private double stopLoss = .1;
     private Double ask = 0d, bid = 0d;
     private IContext context;
     private long TIME_OUT = 5000;
-    private final int MAX_ORDER = 20;
+    private final int MAX_ORDER = 50;
 
 
     @Override
@@ -65,13 +65,11 @@ public class FastStrategy implements IStrategy {
 
                 stopLoss = tick.getBid() - getPipPrice();
 
-                engine.submitOrder(getLabel(inst), inst, BUY, tick.getBidVolume(), tick.getBid(),
-                           SLIPPAGE, getRoundedPrice(stopLoss), getRoundedPrice(tick.getAsk()), TIME_OUT);
+                engine.submitOrder(getLabel(inst), inst, BUY, tick.getBidVolume(), tick.getBid(), SLIPPAGE, stopLoss, tick.getAsk(), TIME_OUT);
 
                 stopLoss = tick.getAsk() + getPipPrice();
 
-                engine.submitOrder(getLabel(inst), inst, SELL, tick.getAskVolume(), tick.getAsk(),
-                           SLIPPAGE, getRoundedPrice(stopLoss), getRoundedPrice(tick.getBid()), TIME_OUT);
+                engine.submitOrder(getLabel(inst), inst, SELL, tick.getAskVolume(), tick.getAsk(), SLIPPAGE, stopLoss, tick.getBid(), TIME_OUT);
 
             }
         } catch (Exception e) { throw new RuntimeException(e); }

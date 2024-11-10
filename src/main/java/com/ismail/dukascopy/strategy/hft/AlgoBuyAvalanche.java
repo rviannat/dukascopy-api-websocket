@@ -42,6 +42,7 @@ public class AlgoBuyAvalanche implements IStrategy {
     private Double ask = 0d, bid = 0d;
     private IContext context;
     private final long TIME_OUT = 5000;
+    private final int MAX_ORDER = 30;
 
 
     @Override
@@ -67,7 +68,7 @@ public class AlgoBuyAvalanche implements IStrategy {
 
     public void onTick(Instrument inst, ITick tick) throws JFException {
         try {
-            if (getPositions().size() < 2 && inst.isTradable()) {
+            if (getPositions().size() > MAX_ORDER && inst.isTradable()) {
                 if(tick.getBidVolume() > 1) {
                     stopLossPrice = tick.getBid() - getPipPrice(LOSS_PIP);
                     for(double avalancheVolume = .01; avalancheVolume < tick.getBidVolume(); avalancheVolume += .01) {
@@ -122,27 +123,6 @@ public class AlgoBuyAvalanche implements IStrategy {
     public void onStop() throws JFException {
     }
 
-    /**************** debug print functions ***********************/
-    private void print(Object... o) {
-        for (Object ob : o) {
-            //console.getOut().print(ob + "  ");
-            if (ob instanceof Double) {
-                print2(toStr((Double) ob));
-            } else if (ob instanceof double[]) {
-                print((double[]) ob);
-            } else if (ob instanceof double[]) {
-                print((double[][]) ob);
-            } else if (ob instanceof Long) {
-                print2(toStr((Long) ob));
-            } else if (ob instanceof IBar) {
-                print2(toStr((IBar) ob));
-            } else {
-                print2(ob);
-            }
-            print2(" ");
-        }
-        console.getOut().println();
-    }
 
     private void print(Object o) {
         console.getOut().println(o);
@@ -162,23 +142,6 @@ public class AlgoBuyAvalanche implements IStrategy {
 
     private void print(double[][] arr) {
         print(toStr(arr));
-    }
-
-    private void print(IBar bar) {
-        print(toStr(bar));
-    }
-
-    private void printIndicatorInfos(IIndicator ind) {
-        for (int i = 0; i < ind.getIndicatorInfo().getNumberOfInputs(); i++) {
-            print(ind.getIndicatorInfo().getName() + " Input " + ind.getInputParameterInfo(i).getName() + " " + ind.getInputParameterInfo(i).getType());
-        }
-        for (int i = 0; i < ind.getIndicatorInfo().getNumberOfOptionalInputs(); i++) {
-            print(ind.getIndicatorInfo().getName() + " Opt Input " + ind.getOptInputParameterInfo(i).getName() + " " + ind.getOptInputParameterInfo(i).getType());
-        }
-        for (int i = 0; i < ind.getIndicatorInfo().getNumberOfOutputs(); i++) {
-            print(ind.getIndicatorInfo().getName() + " Output " + ind.getOutputParameterInfo(i).getName() + " " + ind.getOutputParameterInfo(i).getType());
-        }
-        console.getOut().println();
     }
 
     public static String toStr(double[] arr) {

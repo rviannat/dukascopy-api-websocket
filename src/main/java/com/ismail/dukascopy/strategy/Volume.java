@@ -25,7 +25,7 @@ public class Volume implements IStrategy {
     private IOrder pendingOrderBuy;
     private IOrder pendingOrderSell;
     @Configurable("Instrument")
-    public Instrument instrument = Instrument.EURUSD;
+    public Instrument instrument = Instrument.GBPUSD;
     @Configurable("Period")
     public Period selectedPeriod = Period.ONE_SEC;
     @Configurable("Slippage")

@@ -33,9 +33,6 @@ import com.dukascopy.api.Instrument;
 import com.dukascopy.api.system.ClientFactory;
 import com.dukascopy.api.system.IClient;
 import com.dukascopy.api.system.ISystemListener;
-import com.ismail.dukascopy.strategy.Algo2Strategy;
-import com.ismail.dukascopy.strategy.AlgoStrategy;
-import com.ismail.dukascopy.strategy.AlgosmartFirstStrategy;
 import com.ismail.dukascopy.strategy.AlgosmartFirstStrategy2;
 
 import java.util.HashSet;

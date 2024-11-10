@@ -1,11 +1,10 @@
-package com.ismail.dukascopy.strategy;
+package com.ismail.dukascopy.strategy.hft;
 
 import com.dukascopy.api.*;
 import com.dukascopy.api.IEngine.OrderCommand;
 import com.dukascopy.api.indicators.IIndicator;
 import com.ismail.dukascopy.config.DukasConfig;
 import com.ismail.dukascopy.model.DukasSubscription;
-import com.ismail.dukascopy.util.DukasUtil;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.math.BigDecimal;
