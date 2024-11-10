@@ -10,8 +10,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 
-import com.ismail.dukascopy.strategy.AlgosmartFirstStrategy2;
-import com.ismail.dukascopy.strategy.DukasStrategy;
+import com.ismail.dukascopy.strategy.*;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,21 +36,18 @@ import lombok.extern.slf4j.Slf4j;
 public class DukasService implements ISystemListener, InitializingBean, DisposableBean, ThreadFactory, UncaughtExceptionHandler, Runnable
 {
     private static DukasService sMe = null;
-    
-    
-    
     public final DukasConfig config;
-
     public final IClient client;
-
-    public AlgosmartFirstStrategy2 strategy = new AlgosmartFirstStrategy2();
-
+    public AlgosmartFirstStrategy2 strategy1 = new AlgosmartFirstStrategy2();
+    public FastStrategy strategy2 = new FastStrategy();
+    public Algo2Strategy strategy3 = new Algo2Strategy();
+    public AlgosmartFirstStrategy4 strategy4 = new AlgosmartFirstStrategy4();
+    public AlgosmartFirstStrategy strategy0 = new AlgosmartFirstStrategy();
+    public AlgoBuy strategy5 = new AlgoBuy();
+    public AlgoSell strategy6 = new AlgoSell();
     public final ThreadFactory delegate;
-
     public final ScheduledExecutorService executor;
-
     public JettyServer server = null;
-
     public static DukasService getInstance()
     {
         return sMe;
@@ -165,9 +161,22 @@ public class DukasService implements ISystemListener, InitializingBean, Disposab
             return;
         }
 
-        long id = client.startStrategy(strategy);
-
-        log.info("Started strategy : [{}] {}", id, strategy);
+        long id = client.startStrategy(strategy0);
+        log.info("Started strategy : [{}] {}", id, strategy0);
+        id = client.startStrategy(strategy1);
+        log.info("Started strategy : [{}] {}", id, strategy1);
+        id = client.startStrategy(strategy2);
+        log.info("Started strategy : [{}] {}", id, strategy2);
+        id = client.startStrategy(strategy3);
+        log.info("Started strategy : [{}] {}", id, strategy3);
+        id = client.startStrategy(strategy4);
+        log.info("Started strategy : [{}] {}", id, strategy4);
+        id = client.startStrategy(strategy4);
+        log.info("Started strategy : [{}] {}", id, strategy5);
+        id = client.startStrategy(strategy6);
+        log.info("Started strategy : [{}] {}", id, strategy6);
+        id = client.startStrategy(strategy4);
+        log.info("Started strategy : [{}] {}", id, strategy4);
 
     }
 
@@ -177,7 +186,13 @@ public class DukasService implements ISystemListener, InitializingBean, Disposab
 
         log.info("IClient disconnected.");
 
-        client.startStrategy(strategy);
+        client.startStrategy(strategy0);
+        client.startStrategy(strategy1);
+        client.startStrategy(strategy2);
+        client.startStrategy(strategy3);
+        client.startStrategy(strategy4);
+        client.startStrategy(strategy5);
+        client.startStrategy(strategy6);
 
         client.getStartedStrategies().forEach((id, strategy) -> {
 

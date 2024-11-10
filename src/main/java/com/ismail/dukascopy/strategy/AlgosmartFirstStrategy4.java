@@ -24,7 +24,7 @@ public class AlgosmartFirstStrategy4 implements IStrategy {
     private IOrder pendingOrderBuy;
     private IOrder pendingOrderSell;
     @Configurable("Instrument")
-    public Instrument instrument = Instrument.GBPUSD;
+    public Instrument instrument = Instrument.AUDCHF;
     @Configurable("Period")
     public Period selectedPeriod = Period.ONE_SEC;
     @Configurable("Slippage")
@@ -36,7 +36,7 @@ public class AlgosmartFirstStrategy4 implements IStrategy {
     @Configurable("Take profit pips")
     public final int PROFIT_PIP = 1;
     @Configurable("Stop loss in pips")
-    public final int LOSS_PIP = 30;
+    public final int LOSS_PIP = 5;
     private Double stopLossPrice = 0.0, takeProfitPrice = 0.0;
     private Double ask = 0d, bid = 0d;
     private IContext context;
@@ -69,10 +69,12 @@ public class AlgosmartFirstStrategy4 implements IStrategy {
 
     public void onTick(Instrument inst, ITick tick) throws JFException {
 
-        try {
-            if (getPositions().size() < 90 && inst.isTradable()) {
+        if (inst != this.instrument) {
+            return;
+        }
 
-                ask = Arrays.stream(tick.getAsks()).min().orElse(0d);
+        try {
+            if (getPositions().size() < 20 && inst.isTradable()) {
 
                 ask = Arrays.stream(tick.getAsks()).min().orElse(0d);
                 bid = Arrays.stream(tick.getBids()).max().orElse(0d);

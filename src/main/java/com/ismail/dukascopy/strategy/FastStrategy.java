@@ -33,9 +33,9 @@ public class FastStrategy implements IStrategy {
     @Configurable("Place long first")
     public boolean nextLong = true;
     @Configurable("Take profit pips")
-    public final int PROFIT_PIP = 1;
+    public final int PROFIT_PIP = 0;
     @Configurable("Stop loss in pips")
-    public final int LOSS_PIP = 1;
+    public final int LOSS_PIP = 5;
     private Double stopLossPrice = 0.0, takeProfitPrice = 0.0;
     private Double ask = 0d, bid = 0d;
     private IContext context;
@@ -66,8 +66,12 @@ public class FastStrategy implements IStrategy {
 
     public void onTick(Instrument inst, ITick tick) throws JFException {
 
+        if (inst != this.instrument) {
+            return;
+        }
+
         try {
-            if (getPositions().size() < 50 && inst.isTradable()) {
+            if (getPositions().size() < 20 && inst.isTradable()) {
 
                 if(tick.getBid() < tick.getAsk()) {
                     stopLossPrice = tick.getBid() - getPipPrice(LOSS_PIP);

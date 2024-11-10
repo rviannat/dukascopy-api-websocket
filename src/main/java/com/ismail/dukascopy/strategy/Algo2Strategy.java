@@ -26,7 +26,7 @@ public class Algo2Strategy implements IStrategy {
     private IOrder order;
     private IOrder pendingOrder;
     @Configurable("Instrument")
-    public Instrument instrument = Instrument.GBPUSD;
+    public Instrument instrument = Instrument.EURJPY;
     @Configurable("Period")
     public Period selectedPeriod = Period.ONE_SEC;
     @Configurable("Slippage")
@@ -36,9 +36,9 @@ public class Algo2Strategy implements IStrategy {
     @Configurable("Place long first")
     public boolean nextLong = true;
     @Configurable("Take profit pips")
-    public int takeProfitPips = 3;
+    public int takeProfitPips = 0;
     @Configurable("Stop loss in pips")
-    public int stopLossPips = 20;
+    public int stopLossPips = 5;
     private IContext context;
     private final AtomicReference<IContext> reference = new AtomicReference<>();
     private DukasConfig config;
@@ -72,20 +72,16 @@ public class Algo2Strategy implements IStrategy {
         }
 
         try {
-            if (getPositions().size() < 50) {
+            if (getPositions().size() < 20) {
 
                 if (tick.getBid() > tick.getAsk()) {
-                    submitOrder(OrderCommand.BUYLIMIT, tick, instrument);
-                    submitOrder(OrderCommand.SELLLIMIT, tick, instrument);
+                    submitOrder(OrderCommand.BUY, tick, instrument);
+                    submitOrder(OrderCommand.SELL, tick, instrument);
                 }
             }
         } catch (Exception e) {
             throw new JFException(e);
         }
-
-
-
-
     }
 
     private IOrder submitOrder(OrderCommand orderCmd, ITick tick, Instrument instr) throws JFException {

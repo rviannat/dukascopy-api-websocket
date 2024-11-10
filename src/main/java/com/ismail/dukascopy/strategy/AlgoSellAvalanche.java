@@ -3,14 +3,19 @@ package com.ismail.dukascopy.strategy;
 import com.dukascopy.api.*;
 import com.dukascopy.api.IEngine.OrderCommand;
 import com.dukascopy.api.indicators.IIndicator;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.TimeZone;
 
-public class AlgosmartFirstStrategy implements IStrategy {
+import static com.ismail.dukascopy.constants.Constants.ORDER_AMOUNT;
+
+@Service
+public class AlgoSellAvalanche implements IStrategy {
 
     private IEngine engine;
     private IConsole console;
@@ -19,9 +24,10 @@ public class AlgosmartFirstStrategy implements IStrategy {
     private IAccount account;
     private int counter = 0;
     private IOrder order;
-    private IOrder pendingOrder;
+    private IOrder pendingOrderBuy;
+    private IOrder pendingOrderSell;
     @Configurable("Instrument")
-    public Instrument instrument = Instrument.GBPUSD;
+    public Instrument instrument = Instrument.EURUSD;
     @Configurable("Period")
     public Period selectedPeriod = Period.ONE_SEC;
     @Configurable("Slippage")
@@ -31,9 +37,12 @@ public class AlgosmartFirstStrategy implements IStrategy {
     @Configurable("Place long first")
     public boolean nextLong = true;
     @Configurable("Take profit pips")
-    public int takeProfitPips = 0;
+    public final int PROFIT_PIP = 1;
     @Configurable("Stop loss in pips")
-    public int stopLossPips = 5;
+    public final int LOSS_PIP = 1;
+    private Double stopLossPrice = 0.0, takeProfitPrice = 0.0;
+    private Double ask = 0d, bid = 0d;
+    private IContext context;
 
 
     public double dynamicAmount = amount;
@@ -44,143 +53,50 @@ public class AlgosmartFirstStrategy implements IStrategy {
         this.indicators = context.getIndicators();
         this.history = context.getHistory();
         this.engine = context.getEngine();
+        this.context = context;
 
     }
 
     @Override
     public void onBar(Instrument instrument, Period period, IBar askBar, IBar bidBar) throws JFException {
-        if (period != this.selectedPeriod || instrument != this.instrument) {
-            return;
-        }
+
     }
 
-    public void onTick(Instrument instrument, ITick tick) throws JFException {
+    public List<IOrder> getPositions() throws Exception {
+        if (context == null)
+            throw new RuntimeException("Strategy context not initialized yet");
+        return engine.getOrders();
+    }
 
-        if (instrument != this.instrument) {
-            return;
-        }
+    public void onTick(Instrument inst, ITick tick) throws JFException {
 
-        if (!isActive(order)) {
-            //if(true) {
-            order = null;
+        try {
+            if (getPositions().size() < 50 && inst.isTradable()) {
 
-            if (pendingOrder != null) {
+                if (pendingOrderBuy != null && pendingOrderBuy.getState() == IOrder.State.FILLED) {
+                    stopLossPrice = tick.getBid() - getPipPrice(LOSS_PIP);
+                    engine.submitOrder(getLabel(inst), inst, OrderCommand.BUY, ORDER_AMOUNT, tick.getBid(), 0, stopLossPrice, tick.getAsk());
 
-                if(pendingOrder.getState() == IOrder.State.FILLED) {
-                    // STOP LOSS
-                    order = pendingOrder;
-                    dynamicAmount = dynamicAmount * 2;
-
-                    if (order.isLong()) {
-                        nextLong = true; // switch side
-
-                        pendingOrder = submitOrder(OrderCommand.SELLSTOP, instrument, order.getStopLossPrice());
-
-                    } else {
-                        nextLong = false; // switch side
-
-                        pendingOrder = submitOrder(OrderCommand.BUYSTOP, instrument, order.getStopLossPrice());
-                    }
                 } else {
-                    dynamicAmount = amount;
-                    // TAKE PROFIT, close opposite
-                    closeOrder(pendingOrder);
+                    closeOrder(pendingOrderBuy);
                 }
+
+
             }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-
-        // RESTART
-        if (nextLong) {
-            if (order == null) {
-                // BUY
-                order = submitOrder(OrderCommand.BUY, instrument);
-                dynamicAmount = dynamicAmount * 2;
-                pendingOrder = submitOrder(OrderCommand.SELLSTOP, instrument, order.getStopLossPrice());
-
-            }
-
-        } else {
-            if (order == null) {
-                // SELL
-                order = submitOrder(OrderCommand.SELL, instrument);
-                dynamicAmount = dynamicAmount * 2;
-                pendingOrder = submitOrder(OrderCommand.BUYSTOP, instrument, order.getStopLossPrice());
-
-            }
-        }
-
-
-
-    }
-
-    private IOrder submitOrder(OrderCommand orderCmd, Instrument instr) throws JFException {
-
-        double stopLossPrice = 0.0, takeProfitPrice = 0.0;
-
-        // Calculating order price, stop loss and take profit prices
-        if (orderCmd.isLong()) {
-            double tmp = history.getLastTick(instr).getBid();
-
-            if (stopLossPips > 0) {
-                stopLossPrice = tmp - getPipPrice(stopLossPips);
-            }
-            if (takeProfitPips > 0) {
-                takeProfitPrice = tmp + getPipPrice(takeProfitPips);
-            }
-
-        } else {
-            double tmp = history.getLastTick(instr).getAsk();
-
-            if (stopLossPips > 0) {
-                stopLossPrice = tmp + getPipPrice(stopLossPips);
-            }
-            if (takeProfitPips > 0) {
-                takeProfitPrice = tmp - getPipPrice(takeProfitPips);
-            }
-        }
-
-        return engine.submitOrder(getLabel(instr), instr, orderCmd, dynamicAmount, 0, slippage, getRoundedPrice(stopLossPrice), getRoundedPrice(takeProfitPrice));
-    }
-
-    private IOrder submitOrder(OrderCommand orderCmd, Instrument instr, double price) throws JFException {
-
-        double stopLossPrice = 0.0, takeProfitPrice = 0.0;
-
-        // Calculating order price, stop loss and take profit prices
-        if (orderCmd.isLong()) {
-            if (stopLossPips > 0) {
-                stopLossPrice = price - getPipPrice(stopLossPips);
-            }
-            if (takeProfitPips > 0) {
-                takeProfitPrice = price + getPipPrice(takeProfitPips);
-            }
-
-        } else {
-            if (stopLossPips > 0) {
-                stopLossPrice = price + getPipPrice(stopLossPips);
-            }
-            if (takeProfitPips > 0) {
-                takeProfitPrice = price - getPipPrice(takeProfitPips);
-            }
-        }
-
-        return engine.submitOrder(getLabel(instr), instr, orderCmd, dynamicAmount, price, slippage, getRoundedPrice(stopLossPrice), getRoundedPrice(takeProfitPrice));
-
     }
 
     private void closeOrder(IOrder order) throws JFException {
-        if (order != null && isActive(order)) {
+        if (isActive(order)) {
             order.close();
         }
     }
 
     private boolean isActive(IOrder order) throws JFException {
-        if (order != null && order.getState() != IOrder.State.CLOSED && order.getState() != IOrder.State.CREATED && order.getState() != IOrder.State.CANCELED) {
-            return true;
-        }
-        return false;
+        return order != null && order.getState() != IOrder.State.CLOSED && order.getState() != IOrder.State.CREATED && order.getState() != IOrder.State.CANCELED;
     }
-
 
     private double getPipPrice(double pips) {
         return pips * this.instrument.getPipValue();
