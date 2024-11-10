@@ -58,7 +58,7 @@ public class FastStrategy implements IStrategy {
 
     public void onTick(Instrument inst, ITick tick) throws JFException {
 
-        if (inst != this.instrument) { return; }
+
 
         try {
             if (getOpenPositions() < MAX_ORDER && inst.isTradable()) {

@@ -36,6 +36,7 @@ import com.dukascopy.api.system.ISystemListener;
 import com.ismail.dukascopy.strategy.AlgoStrategy;
 import com.ismail.dukascopy.strategy.AlgosmartFirstStrategy;
 import com.ismail.dukascopy.strategy.Volume;
+import com.ismail.dukascopy.strategy.hft.FastStrategy;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -129,7 +130,7 @@ public class Main {
         //start the strategy
 
 
-        client.startStrategy(new Volume());
+        client.startStrategy(new FastStrategy());
         //now it's running
     }
 }
